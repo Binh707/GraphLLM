@@ -1,9 +1,4 @@
-"نحوه بچ بندی با NeighborLoader. "
-"""
-with TAGLAS dataset
-with both attention and mean
-node classification
-"""
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -25,7 +20,7 @@ import os
 
 
 def set_seed(seed):
-    """تنظیم seed برای تمام عملیات تصادفی"""
+
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     np.random.seed(seed)
@@ -161,7 +156,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='َ  a hybrid method for node classification')
     
-    # اضافه کردن آرگومان‌های مورد نیاز
+
     parser.add_argument('dataset_name',default='cora', help='dataset name')
     parser.add_argument('model_name',default='BiGTex', help='dataset name (GCN, GAT, SAGE , BiGTex(ours))')
     parser.add_argument('--batch_size',default=6, type=int, help='size of batch')
@@ -186,11 +181,13 @@ def main():
     Lora=args.Lora
 
 
+
     start_time = time.time()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
 
     dataset_name=args.dataset_name
+    print("dataset_name= ",dataset_name)
     #------------------------- LOAD DATASET
     if dataset_name=='products':
         data, texts=load_products_subset()
@@ -250,7 +247,7 @@ def main():
     test_acc=[]
     for i in range(num_iterate):
         base_seed=42
-        current_seed = base_seed + i  # مثلا base_seed = 42
+        current_seed = base_seed + i  
         set_seed(current_seed)
 
         print(F"ITERATION {i+1}")
@@ -267,7 +264,7 @@ def main():
         val_acc.append(val_)
         test_acc.append(test_)
         print(f"train{train_acc}, val{val_acc}, test{test_acc}")
-        # SaveEmbeddings(model,train_loader,valid_loader,test_loader, dataset_name, model_name)
+        
     
     
      
@@ -281,7 +278,7 @@ def main():
     elapsed_time = end_time - start_time  
     print(f"runtime: {elapsed_time:.4f} sec")  
     print("Save embeddings ...")
-    # SaveEmbeddings(model,train_loader,valid_loader,test_loader, dataset_name, model_name)
+    SaveEmbeddings(model,train_loader,valid_loader,test_loader, dataset_name, model_name)
     
 
 if __name__ == '__main__':
