@@ -18,7 +18,7 @@ PubMed | Download the dataset [here](https://drive.google.com/file/d/1sYZX-jP6H8
 
 ## Training and then save embeddings the BiGTex
 
-### To use different GNN models
+### To use different GNN models, for ogbn-arxiv (you can run for other dataset: 'pubmed', 'products', 'arxiv_2023')
 ```
 python main.py 'arxiv' 'BiGTex'
 ```
