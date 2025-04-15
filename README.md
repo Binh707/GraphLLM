@@ -16,9 +16,11 @@
 |Cora| Download the dataset [here](https://drive.google.com/file/d/1hxE0OPR7VLEHesr48WisynuoNMhXJbpl/view?usp=share_link), unzip and move it to `dataset/cora_orig`.|
 PubMed | Download the dataset [here](https://drive.google.com/file/d/1sYZX-jP6H8OkopVa9cp8-KXdEti5ki_W/view?usp=sharing), unzip and move it to `dataset/PubMed_orig`.|
 
-## Training and then save embeddings the BiGTex
+## Training and then save embeddings the BiGTex for ogbn-arxiv
 
-### To use different GNN models, for ogbn-arxiv (you can run for other dataset: 'pubmed', 'products', 'arxiv_2023')
+
 ```
 python main.py 'arxiv' 'BiGTex'
+
+  (you can run for other dataset: 'pubmed', 'products', 'arxiv_2023')
 ```
