@@ -108,27 +108,7 @@ class GraphTextModel(nn.Module):
         for gcn_layer in self.gcn_layers:
             edge_index = edge_index.long()
 
-            """
-            # میانگین گرفتن بدون توجه
-            if count != 0:
-                x = graph_embedding
-            graph_embedding = graph_embedding.unsqueeze(1)
-            modified_embeddings = torch.cat((graph_embedding, input_embeddings), dim=1)
-            attention_mask = tokens['attention_mask']
-            batch_size = attention_mask.shape[0]
-            new_token_mask = torch.ones((batch_size, 1), dtype=attention_mask.dtype, device=attention_mask.device)
-            attention_mask = torch.cat([new_token_mask, attention_mask], dim=1)
-            outputs = self.text_model(inputs_embeds=modified_embeddings, attention_mask=attention_mask)
-            hidden_states = outputs.last_hidden_state
-            text_embedding = hidden_states[:, 0, :]
             
-            if count != 0:
-                graph_embedding = (text_embedding + x) / 2
-            else:
-                graph_embedding = text_embedding
-            graph_embedding = gcn_layer(graph_embedding, edge_index)
-            count += 1
-            """
             if self.soft:
                 ## w\ soft  prompt
                 # گراف روی متن توجه می‌کند (Cross Attention)
@@ -156,127 +136,7 @@ class GraphTextModel(nn.Module):
 
         return self.classifier(graph_embedding),graph_embedding
 
-class GraphTextModel1(nn.Module):
-    def __init__(self, feature_dim, text_embedding_dim,num_classes,texts, embedding_dim=128, num_gcn_layers=2):
-        super(GraphTextModel1, self).__init__()
-        # self.tokenizer = DistilBertTokenizer.from_pretrained('./distilbert_lora_finetuned')
-        # self.text_model = DistilBertModel.from_pretrained('./distilbert_lora_finetuned')
-        self.tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
-        self.text_model = BertModel.from_pretrained("bert-base-uncased")
-        self.texts=texts
-            
-        for param in self.text_model.parameters():
-            param.requires_grad = False
-        
-        self.projection1 = nn.Sequential(
-            nn.Linear(feature_dim, text_embedding_dim),
-            # nn.ReLU(),
-            # nn.Linear(128, text_embedding_dim)
-        )
-        self.projection2 = nn.Sequential(
-            nn.Linear(text_embedding_dim, embedding_dim),
-            # nn.ReLU(),
-            # nn.Linear(128, embedding_dim)
-        )
-        self.gcn_layers = nn.ModuleList([
-            GCNConv(embedding_dim, embedding_dim) 
-            for _ in range(num_gcn_layers)
-        ])
-        #-------- GAT layers
-        # self.gcn_layers = nn.ModuleList([  
-        #     GATConv(embedding_dim, embedding_dim)   
-        #     for _ in range(num_gcn_layers)  
-        # ])
-        # num_heads = 8  # به عنوان مثال  
-        # self.gcn_layers = nn.ModuleList([  
-        #     GATConv(text_embedding_dim, text_embedding_dim // num_heads, heads=num_heads)  
-        #     for _ in range(num_gcn_layers)  
-        # ])
-        #------------------- graph_SAGE     agg=mean
-        # self.gcn_layers = nn.ModuleList([  
-        #     SAGEConv(embedding_dim, embedding_dim)   
-        #     for _ in range(num_gcn_layers)  
-        # ])
-        
-        
-        self.classifier = nn.Sequential(
-            nn.Linear(embedding_dim, num_classes),
-            # nn.ReLU(),
-            # nn.Linear(64, num_classes)
-        )
-        self.cross_attention = nn.MultiheadAttention(text_embedding_dim, 4)
 
-    def forward(self, x, edge_index,n_id, feature_vec):
-        # transformed_feature = self.feature_transform(feature_vec)
-
-        text = [self.texts[i] for i in n_id.cpu().numpy()]
-        tokens = self.tokenizer(text, padding=True, truncation=True, max_length=128, return_tensors='pt')
-        tokens = tokens.to(edge_index.device)
-        input_embeddings = self.text_model.get_input_embeddings()(tokens['input_ids'])
-        # ## w\o soft prompt
-        # text_embedding_for_attention=torch.mean(input_embeddings, dim=1) 
-        # text_embedding_for_attention=text_embedding_for_attention.unsqueeze(0)
-        # ## w\o soft prompt
-       
-        graph_embedding=feature_vec
-        # print("graph_embedding.shape=",graph_embedding.shape)
-        count = 0
-        
-        for gcn_layer in self.gcn_layers:
-            edge_index = edge_index.long()
-
-           
-            graph_embedding=self.projection1(graph_embedding)
-            # print("graph_embedding.shape=",graph_embedding.shape)
-            # گراف روی متن توجه می‌کند (Cross Attention)
-            graph_embedding = graph_embedding.unsqueeze(1)
-            # print("graph_embedding.shape=",graph_embedding.shape)
-            modified_embeddings = torch.cat((graph_embedding, input_embeddings), dim=1)
-            # print("modified_embeddings.shape",modified_embeddings.shape)
-            attention_mask = tokens['attention_mask']
-            batch_size = attention_mask.shape[0]
-            new_token_mask = torch.ones((batch_size, 1), dtype=attention_mask.dtype, device=attention_mask.device)
-            attention_mask = torch.cat([new_token_mask, attention_mask], dim=1)
-            outputs = self.text_model(inputs_embeds=modified_embeddings, attention_mask=attention_mask)
-            # print("outputs.shape=",outputs.shape)
-            hidden_states = outputs.last_hidden_state
-            text_embedding = hidden_states[:, 0, :]    # cls
-            # print("text_embedding.shape",text_embedding.shape)
-
-            token_embeddings = hidden_states[:, 1:, :]
-            # print("token_embeddings.shape",token_embeddings.shape)
-            mean_embeddings = token_embeddings.mean(dim=1) # mean of output
-            # print("mean_embeddings.shape",mean_embeddings.shape)
-
-            # # متن روی گراف توجه می‌کند (اضافه شده)
-            graph_embedding_for_attention = graph_embedding.squeeze(1).unsqueeze(0)  # [1, batch_size, embedding_dim]
-            # print("graph_embedding_for_attention.shape",graph_embedding_for_attention.shape)
-            text_embedding_for_attention = text_embedding.unsqueeze(0)  # [1, batch_size, embedding_dim]
-            # print("text_embedding_for_attention.shape",text_embedding_for_attention.shape)
-            mean_embeddings=mean_embeddings.unsqueeze(0)           # [1, batch_size, embedding_dim]
-            # print("mean_embeddings.sjape",mean_embeddings.shape)
-            
-       
-            text_to_graph_attention, _ = self.cross_attention(graph_embedding_for_attention, text_embedding_for_attention,graph_embedding_for_attention)
-            # text_to_graph_attention= (graph_embedding_for_attention+text_embedding_for_attention)/2  # without cross attention
-            # print('text_to_graph_attention.shape=',text_to_graph_attention.shape)
-            
-            
-            text_to_graph_attention = text_to_graph_attention.squeeze(0)  # [batch_size, embedding_dim]
-            # print('text_to_graph_attention.shape=',text_to_graph_attention.shape)
-            # # ترکیب توجه گراف → متن و متن → گراف
-            # combined_embedding = (text_embedding + text_to_graph_attention) / 2
-            # graph_embedding = graph_embedding.squeeze(1)
-            # combined_embedding=0.3*graph_embedding+0.7*text_to_graph_attention
-            # print("combined_embedding.shape",combined_embedding.shape)
-
-            combined_embedding_transform=self.projection2(text_to_graph_attention)
-            # print("combined_embedding_transform.shae",combined_embedding_transform.shape)
-            # به‌روزرسانی گراف با GCN
-            graph_embedding = gcn_layer(combined_embedding_transform, edge_index)
-            # print("graph_embedding.shape",graph_embedding.shape)
-
-        return self.classifier(graph_embedding),graph_embedding
 
 class GNN(nn.Module):
     def __init__(self, feature_dim, GNN_name, num_classes, num_gcn_layers=2):
