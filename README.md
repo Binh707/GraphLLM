@@ -26,4 +26,4 @@ or other models: 'MLP', 'GCN', 'GAT', 'SAGE'
 
 ## BiGTex embeddings
 You can download the generated embeddings by BiGTex [here](https://drive.google.com/drive/folders/1nF8NDGObIqU0kCkzVaisWooGEQlcNSIN?usp=sharing).
-after that move them to `embeddings`, so you can run more expremints like link prediction or clusstering using them.
+after that move them to `embeddings`, so you can run more experiments like link prediction or clusstering using them.
