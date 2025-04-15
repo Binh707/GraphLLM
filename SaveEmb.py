@@ -79,7 +79,7 @@ def SaveEmbeddings(model,train_loader,valid_loader,test_loader, dataset_name, mo
       
 
     # نام فایل برای ذخیره داده‌ها  
-    filename = 'embeddings_'+ dataset_name+"_"+ model_name+ '.csv'  
+    filename = 'embeddings/embeddings_'+ dataset_name+"_"+ model_name+ '.csv'  
     # ذخیره در CSV  
     # filename = 'embeddings_with_labels.csv'  
     with open(filename, mode='w', newline='') as file:  
