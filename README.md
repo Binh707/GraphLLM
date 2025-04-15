@@ -4,9 +4,9 @@
 
 
 
-## Download TAG datasets
+## First, Download TAG datasets
 
-### A. Original text attributes
+
 
 | Dataset | Description |
 | ----- |  ---- |
