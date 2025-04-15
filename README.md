@@ -20,7 +20,9 @@ PubMed | Download the dataset [here](https://drive.google.com/file/d/1sYZX-jP6H8
 
 ```
 python main.py 'arxiv' 'BiGTex'
-
 ```
 you can run for other dataset: 'pubmed', 'products', 'arxiv_2023'
 or other models: 'MLP', 'GCN', 'GAT', 'SAGE'
+
+## BiGTex embeddings
+You can download the generated embeddings by BiGTex [here](https://drive.google.com/drive/folders/1nF8NDGObIqU0kCkzVaisWooGEQlcNSIN?usp=sharing).
