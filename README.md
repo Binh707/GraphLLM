@@ -1,6 +1,6 @@
 # BiGTex
 # Integrating Structural and Semantic Signals in Text-Attributed Graphs with BiGTex
-[![arXiv](https://arxiv.org/abs/2504.12474)
+[![arXiv]](https://arxiv.org/abs/2504.12474)
 
 
 
