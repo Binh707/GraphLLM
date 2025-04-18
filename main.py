@@ -157,13 +157,13 @@ def main():
     parser = argparse.ArgumentParser(description='َ  a hybrid method for node classification')
     
 
-    parser.add_argument('dataset_name',default='cora', help='dataset name')
+    parser.add_argument('dataset_name',default='arxiv', help='dataset name')
     parser.add_argument('model_name',default='BiGTex', help='dataset name (GCN, GAT, SAGE , BiGTex(ours))')
     parser.add_argument('--batch_size',default=6, type=int, help='size of batch')
     parser.add_argument('--epochs', default=10, type=int, help='number of epochs ')
     parser.add_argument('--num_layers', default=2, type=int, help='number of layers ')
     parser.add_argument('--embedding_dim', default=768, type=int, help='size of embeddings ')
-    parser.add_argument('--num_iterate', default=2, type=int, help='number of traaining iteration ')
+    parser.add_argument('--num_iterate', default=10, type=int, help='number of training iteration ')
     parser.add_argument('--language_model_name',default='BERT', help=' (BERT, GPT)')
     parser.add_argument('--soft_prompting',default='True', help=' (True, False)')
     parser.add_argument('--Lora',default='True', help=' (True, False)')
