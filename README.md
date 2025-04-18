@@ -12,7 +12,7 @@ The article can be viewed and downloaded from(https://arxiv.org/abs/2504.12474)
 | ----- |  ---- |
 | ogbn-arxiv  | The [OGB](https://ogb.stanford.edu/docs/nodeprop/) provides the mapping from MAG paper IDs into the raw texts of titles and abstracts. <br/>Download the dataset [here](https://snap.stanford.edu/ogb/data/misc/ogbn_arxiv/titleabs.tsv.gz), move it to `datasets/arxiv`.|
 | ogbn-products (subset) |  The dataset is located under `dataset/ogbn_products_orig`.|
-| arxiv_2023 |  Download the dataset [here](https://drive.google.com/file/d/1ekG96JHNPWqeQdb6D_GZoM28OGRLdcS_/view?usp=drive_link), move it to `datasets/arxiv_2023`.|
+| arxiv_2023 |  Download the dataset [here](https://drive.google.com/file/d/1ekG96JHNPWqeQdb6D_GZoM28OGRLdcS_/view?usp=drive_link), unzip and move it to `datasets/arxiv_2023`.|
 PubMed | Download the dataset [here](https://drive.google.com/file/d/1sYZX-jP6H8OkopVa9cp8-KXdEti5ki_W/view?usp=sharing), unzip and move it to `dataset/PubMed_orig`.|
 
 ## Training and then save embeddings for BiGTex and ogbn-arxiv
