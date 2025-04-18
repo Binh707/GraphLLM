@@ -24,5 +24,5 @@ you can run for other dataset: 'pubmed', 'products', 'arxiv_2023'
 or other models: 'MLP', 'GCN', 'GAT', 'SAGE'
 
 ## BiGTex embeddings
-You can download the generated embeddings by BiGTex [here for ogbn-arxiv](https://drive.google.com/file/d/1ECAkhT8_-DO34ulJtpZw4goN8lePxzKY/view?usp=drive_link).
-after that move them to `embeddings`, so you can run more experiments like link prediction or clusstering using them.
+You can download the generated embeddings by BiGTex [here for ogbn-arxiv](https://drive.google.com/file/d/1ECAkhT8_-DO34ulJtpZw4goN8lePxzKY/view?usp=drive_link), [here for products-subset](https://drive.google.com/file/d/1-VD7XHX6QQ0Z_9mtAZUeSvahZysdSYKM/view?usp=drive_link), [here for pubmed] (https://drive.google.com/file/d/1ZmgP9am_Q_hc1vR-KEc_4dLlTufU18HX/view?usp=drive_link), [here for arxiv_2023] (https://drive.google.com/file/d/1JamvArCN69cnlieooHE4ayRdtjv_bxn0/view?usp=drive_link).
+unzip and move them to `embeddings`, so you can run more experiments like link prediction or clusstering using them.
