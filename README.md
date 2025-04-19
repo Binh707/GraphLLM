@@ -28,6 +28,10 @@ You can download the generated embeddings by BiGTex [here ](https://drive.google
 unzip and move them to `embeddings`, so you can run more experiments like link prediction or clusstering using them.
 
 ##
+## Citation
+If you find our work useful, please consider citing our work:
+
+```
 @misc{beiranv2025integrating,
     title={Integrating Structural and Semantic Signals in Text-Attributed Graphs with BiGTex},
     author={Azadeh Beiranvand and Seyed Mehdi Vahidipour},
@@ -36,3 +40,4 @@ unzip and move them to `embeddings`, so you can run more experiments like link p
     archivePrefix={arXiv},
     primaryClass={cs.CL}
 }
+``` 
