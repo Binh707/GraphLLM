@@ -207,9 +207,9 @@ def main():
     #---------------------------- SELECT MODEL
     def select_model(model_name):
         if model_name=="BiGTex":
-            model = GraphTextModel(
+            model = GraphLLMModel(
                 feature_dim=data.x.shape[1],
-                text_embedding_dim=768,
+                text_embedding_dim=4096,
                 embedding_dim=embedding_dim,
                 num_classes=len(torch.unique(data.y)),
                 texts=texts,
