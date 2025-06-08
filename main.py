@@ -245,6 +245,10 @@ def main():
     train_acc=[]
     val_acc=[]
     test_acc=[]
+
+    torch.backends.cuda.matmul.allow_tf32 = True
+    torch.backends.cudnn.allow_tf32 = True
+
     for i in range(num_iterate):
         base_seed=42
         current_seed = base_seed + i  
