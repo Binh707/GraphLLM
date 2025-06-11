@@ -76,7 +76,7 @@ def train_model(model, train_loader, valid_loader, test_loader, epochs=10):
             batch.y = batch.y.to(device)
 
             optimizer.zero_grad()
-            outputs, _ = model(batch.x, batch.edge_index, batch.n_id, batch.x)
+            outputs, _ = model(batch.edge_index, batch.n_id, batch.x)
 
             batch.y = batch.y.squeeze()
 
@@ -86,8 +86,8 @@ def train_model(model, train_loader, valid_loader, test_loader, epochs=10):
             total_train_loss += loss.item()
 
             preds = outputs.argmax(dim=1)
-            y_pred_train.append(preds.cpu())
-            y_true_train.append(batch.y.cpu())
+            y_pred_train.append(preds[:batch.batch_size].cpu())
+            y_true_train.append(batch.y[:batch.batch_size].cpu())
         
         y_pred_train = torch.cat(y_pred_train, dim=0)
         y_true_train = torch.cat(y_true_train, dim=0)
@@ -101,12 +101,12 @@ def train_model(model, train_loader, valid_loader, test_loader, epochs=10):
             for batch in tqdm(valid_loader, desc=f'Epoch {epoch + 1}/{epochs}'): 
             # for batch in valid_loader:
                 batch = batch.to(device)
-                outputs, _ = model(batch.x, batch.edge_index, batch.n_id, batch.x)
+                outputs, _ = model(batch.edge_index, batch.n_id, batch.x)
                 val_loss = criterion(outputs, batch.y.squeeze())
                 total_val_loss += val_loss.item()
                 preds = outputs.argmax(dim=1)
-                y_pred_val.append(preds.cpu())
-                y_true_val.append(batch.y.cpu())
+                y_pred_val.append(preds[:batch.batch_size].cpu())
+                y_true_val.append(batch.y[:batch.batch_size].cpu())
 
         y_pred_val = torch.cat(y_pred_val, dim=0)
         y_true_val = torch.cat(y_true_val, dim=0)
@@ -122,10 +122,10 @@ def train_model(model, train_loader, valid_loader, test_loader, epochs=10):
             for batch in tqdm(test_loader, desc=f'Epoch {epoch + 1}/{epochs}'): 
             # for batch in test_loader:
                 batch = batch.to(device)
-                outputs, _ = model(batch.x, batch.edge_index, batch.n_id, batch.x)
+                outputs, _ = model(batch.edge_index, batch.n_id, batch.x)
                 preds = outputs.argmax(dim=1)
-                y_pred.append(preds.cpu())
-                y_true.append(batch.y.cpu())
+                y_pred.append(preds[:batch.batch_size].cpu())
+                y_true.append(batch.y[:batch.batch_size].cpu())
         
         y_pred = torch.cat(y_pred, dim=0)
         y_true = torch.cat(y_true, dim=0)
@@ -207,9 +207,9 @@ def main():
     #---------------------------- SELECT MODEL
     def select_model(model_name):
         if model_name=="BiGTex":
-            model = GraphLLMModel(
+            model = GraphTextModel(
                 feature_dim=data.x.shape[1],
-                text_embedding_dim=4096,
+                text_embedding_dim=768,
                 embedding_dim=embedding_dim,
                 num_classes=len(torch.unique(data.y)),
                 texts=texts,
