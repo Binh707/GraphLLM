@@ -82,7 +82,7 @@ class GraphTextModel(nn.Module):
         )
         self.cross_attention = nn.MultiheadAttention(text_embedding_dim, 4)
 
-    def forward(self, x, edge_index,n_id, feature_vec):
+    def forward(self, edge_index, n_id, feature_vec):
         transformed_feature = self.feature_transform(feature_vec)
 
         text = [self.texts[i] for i in n_id.cpu().numpy()]
@@ -167,7 +167,7 @@ class GNN(nn.Module):
         )
 
 
-    def forward(self, x, edge_index,n_id, feature_vec):
+    def forward(self, edge_index, n_id, feature_vec):
         
         graph_embedding=feature_vec
        
